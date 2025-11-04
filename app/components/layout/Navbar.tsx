@@ -100,7 +100,7 @@ export default function Navbar() {
                         
                         {/* Monogram - smaller */}
                         <div className="relative z-10 text-center">
-                          <div className="text-[20px] font-serif font-bold leading-none bg-gradient-to-br from-[#f4e5a3] via-[#d4af37] to-[#a37d24] bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-700">
+                          <div className="text-[20px] font-serif font-bold leading-none bg-linear-to-br from-[#f4e5a3] via-[#d4af37] to-[#a37d24] bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-700">
                             D
                           </div>
                         </div>
