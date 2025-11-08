@@ -1,166 +1,256 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Target, Shield, Globe, Award } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { Target, Eye, Globe2 } from 'lucide-react';
 
-export default function MissionVisionSection() {
-  const cards = [
-    {
-      icon: Target,
-      title: 'Our Mission',
-      text: `To connect markets, people, and opportunities through integrity, innovation, and excellence — creating ventures that redefine global standards of trust and sophistication.`,
-      accent: '#d4af37', // gold
-    },
-    {
-      icon: Shield,
-      title: 'Our Vision',
-      text: `To be a global symbol of reliability and class — a name synonymous with quality, ambition, and innovation across industries and continents.`,
-      accent: '#C0C0C0', // silver
-    },
-  ];
+export default function MissionVisionCinematic() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start 75%', 'end 25%'],
+  });
 
-  const values = [
-    {
-      icon: Award,
-      title: 'Excellence',
-      text: 'Striving to deliver beyond expectations in every venture we pursue.',
-    },
-    {
-      icon: Globe,
-      title: 'Global Outlook',
-      text: 'Building international bridges that unite people and businesses.',
-    },
-  ];
+  const shimmerY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const shimmerOpacity = useTransform(scrollYProgress, [0, 1], [0.25, 0.7]);
+  const [hoverSide, setHoverSide] = useState<'mission' | 'vision' | null>(null);
 
   return (
-    <section className="relative bg-black text-white py-28 md:py-40 overflow-hidden">
-      {/* Background Grain */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'url("data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27 viewBox=%270 0 100 100%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%270.25%27/%3E%3C/svg%3E")',
-        }}
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center space-y-20">
-        {/* Section Header */}
-        <div className="space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex items-center justify-center space-x-3"
-          >
+    <section ref={sectionRef} id="mission-vision" className="relative bg-black text-white overflow-hidden">
+      <div className="max-w-[1400px] mx-auto px-6 py-24 md:py-36">
+        {/* Header */}
+        <div className="text-center mb-14 md:mb-20">
+          <div className="flex items-center justify-center space-x-3">
             <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#d4af37]" />
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37]/80 font-light">
-              Our Philosophy
-            </span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4af37]/80">Our Philosophy</span>
             <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#d4af37]" />
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="text-4xl md:text-6xl font-serif font-bold bg-gradient-to-br from-[#f5e7b1] via-[#d4af37] to-[#a37d24] bg-clip-text text-transparent"
-          >
-            Mission & Vision
-          </motion.h2>
-        </div>
-
-        {/* Mission + Vision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-          {cards.map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: i * 0.2 }}
-              className="relative bg-gradient-to-br from-[#0c0c0c] via-black to-[#0c0c0c] border border-white/10 rounded-3xl p-10 text-left group overflow-hidden"
-            >
-              {/* Hover Accent Border */}
-              <motion.div
-                className="absolute inset-0 rounded-3xl border-2 opacity-0 group-hover:opacity-100 transition duration-700"
-                style={{ borderColor: card.accent }}
-              />
-              
-              {/* Light sweep */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100"
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 5, repeat: Infinity }}
-              />
-
-              {/* Icon */}
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
-                style={{
-                  background: `linear-gradient(135deg, ${card.accent}22, transparent)`,
-                }}
-              >
-                <card.icon className="w-8 h-8" style={{ color: card.accent }} />
-              </div>
-
-              {/* Title */}
-              <h3
-                className="text-3xl md:text-4xl font-serif font-bold mb-4"
-                style={{
-                  background: `linear-gradient(to right, ${card.accent}, #fff)`,
-                  WebkitBackgroundClip: 'text',
-                  color: 'transparent',
-                }}
-              >
-                {card.title}
-              </h3>
-
-              {/* Text */}
-              <p className="text-white/60 font-light leading-relaxed">
-                {card.text}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Core Values Section */}
-        <div className="mt-24 space-y-12">
-          <motion.h3
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9 }}
-            className="text-3xl md:text-4xl font-serif font-bold text-[#f5e7b1]"
-          >
-            Our Core Values
-          </motion.h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
-            {values.map((v, i) => (
-              <motion.div
-                key={v.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: i * 0.2 }}
-                className="relative p-8 border border-white/10 rounded-2xl bg-gradient-to-b from-[#111]/50 to-black backdrop-blur-sm group"
-              >
-                {/* Glow border on hover */}
-                <motion.div
-                  className="absolute inset-0 rounded-2xl border-2 opacity-0 group-hover:opacity-100 transition-all duration-700"
-                  style={{ borderColor: '#d4af37' }}
-                />
-                <div className="flex items-start gap-4">
-                  <v.icon className="w-8 h-8 text-[#d4af37] flex-shrink-0" />
-                  <div className="text-left">
-                    <h4 className="text-2xl font-serif font-semibold text-white mb-2">
-                      {v.title}
-                    </h4>
-                    <p className="text-white/60 font-light">{v.text}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
           </div>
+          <h2 className="mt-4 text-4xl md:text-6xl font-serif font-bold bg-gradient-to-br from-[#f5e7b1] via-[#d4af37] to-[#a37d24] bg-clip-text text-transparent">
+            The Dual Essence
+          </h2>
+          <p className="mt-4 text-white/60 max-w-2xl mx-auto">
+            Purpose in gold. Perspective in silver. One uncompromising standard.
+          </p>
+        </div>
+
+        {/* Panels */}
+        <div className="relative rounded-[28px] overflow-hidden border border-white/10">
+          {/* divider shimmer */}
+          <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[2px]">
+            <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[2px] bg-white/10" />
+            <motion.div
+              className="absolute left-1/2 -translate-x-1/2 w-[2px] rounded-full"
+              style={{
+                top: shimmerY,
+                height: '28%',
+                opacity: shimmerOpacity,
+                background:
+                  'linear-gradient(to bottom, rgba(245,231,177,0.0), rgba(212,175,55,0.7), rgba(224,224,224,0.75), rgba(245,231,177,0.0))',
+              }}
+            />
+          </div>
+
+          <div className="relative grid grid-cols-1 md:grid-cols-2">
+            <Panel
+              side="mission"
+              title="Our Mission"
+              icon={Target}
+              color="#d4af37"
+              hoverSide={hoverSide}
+              setHoverSide={setHoverSide}
+              lines={[
+                'To connect global communities through seamless travel, trade, and logistics —',
+                'delivering excellence at every step.',
+              ]}
+              body="We build systems that merge ambition with discipline — elevating service, trust, and precision for every client we serve."
+            />
+            <Panel
+              side="vision"
+              title="Our Vision"
+              icon={Eye}
+              color="#c0c0c0"
+              hoverSide={hoverSide}
+              setHoverSide={setHoverSide}
+              lines={[
+                'To be a global symbol of reliability and class —',
+                'a standard without compromise.',
+              ]}
+              body="We pursue intelligent scale: expanding footprints, deepening capability, and setting benchmarks that quietly become the rule for our industries."
+            />
+          </div>
+        </div>
+
+        {/* Core values */}
+        <div className="mt-14 md:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <ValueCard
+            title="Excellence"
+            accent="#d4af37"
+            text="Quality is our default setting — from itinerary and cargo to communication and aftercare."
+          />
+          <GlobalPresenceCard />
         </div>
       </div>
     </section>
   );
+}
+
+function Panel({ side, title, icon: Icon, color, hoverSide, setHoverSide, lines, body }: any) {
+  const hoverActive = hoverSide === side;
+  return (
+    <div
+      onMouseEnter={() => setHoverSide(side)}
+      onMouseLeave={() => setHoverSide(null)}
+      className="relative p-8 md:p-12"
+    >
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -inset-8 md:-inset-10 rounded-[36px]"
+        animate={{
+          background:
+            hoverActive
+              ? `radial-gradient(600px 300px at ${side === 'mission' ? '20%' : '80%'} 50%, ${hexToRgba(
+                  color,
+                  0.14
+                )}, transparent 60%)`
+              : 'radial-gradient(600px 300px at 50% 50%, rgba(255,255,255,0.00), transparent 60%)',
+        }}
+        transition={{ duration: 0.5 }}
+      />
+      <div className="flex items-center gap-4">
+        <div
+          className="w-12 h-12 rounded-2xl flex items-center justify-center"
+          style={{ background: `linear-gradient(135deg, ${color}26, transparent)` }}
+        >
+          <Icon className="w-6 h-6" style={{ color }} />
+        </div>
+        <h3
+          className="text-3xl md:text-4xl font-serif font-bold"
+          style={{
+            background: `linear-gradient(90deg, ${color}, #ffffff)`,
+            WebkitBackgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          {title}
+        </h3>
+      </div>
+      <div className="mt-5 md:mt-6 space-y-1">
+        {lines.map((line: string, i: number) => (
+          <motion.p
+            key={i}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.1 }}
+            className="text-lg md:text-xl text-white/80"
+          >
+            {line}
+          </motion.p>
+        ))}
+      </div>
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="mt-5 md:mt-6 text-white/60 leading-relaxed"
+      >
+        {body}
+      </motion.p>
+    </div>
+  );
+}
+
+function ValueCard({ title, text, accent }: any) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#101010] to-[#0a0a0a] p-6"
+    >
+      <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" whileHover={{ boxShadow: `0 0 0 1px ${accent}` }} />
+      <h4
+        className="text-2xl font-serif font-semibold mb-2"
+        style={{
+          background: `linear-gradient(90deg, ${accent}, #ffffff)`,
+          WebkitBackgroundClip: 'text',
+          color: 'transparent',
+        }}
+      >
+        {title}
+      </h4>
+      <p className="text-white/60">{text}</p>
+    </motion.div>
+  );
+}
+
+/* ✨ Global Presence Card (enhanced with flags & animation) */
+function GlobalPresenceCard() {
+  const countries = [
+    { name: 'United Arab Emirates', code: 'ae', year: '2020' },
+    { name: 'Georgia', code: 'ge', year: '2021' },
+    { name: 'India', code: 'in', year: '2021' },
+    { name: 'United Kingdom', code: 'gb', year: '2025' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#101010] to-[#0a0a0a] p-6"
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <Globe2 className="w-6 h-6 text-[#c0c0c0]" />
+        <h4 className="text-2xl font-serif font-semibold bg-gradient-to-br from-[#eaeaea] to-[#c0c0c0] bg-clip-text text-transparent">
+          Global Presence
+        </h4>
+      </div>
+      <p className="text-white/60 mb-6">
+        Registered in UAE, Georgia, and India — expanding into the United Kingdom.
+      </p>
+
+      <div className="relative grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {countries.map((c) => (
+          <motion.div
+            key={c.code}
+            whileHover={{ scale: 1.08 }}
+            className="relative text-center p-4 rounded-xl border border-white/10 hover:border-[#d4af37]/30 transition-all bg-gradient-to-b from-[#0b0b0b] to-[#111]"
+          >
+            <img
+              src={`https://flagcdn.com/w40/${c.code}.png`}
+              alt={c.name}
+              className="w-8 h-6 mx-auto rounded-sm mb-2"
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Subtle world glow */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 20% 20%, rgba(212,175,55,0.25) 1px, transparent 1px), radial-gradient(circle at 80% 80%, rgba(192,192,192,0.25) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+        }}
+      />
+    </motion.div>
+  );
+}
+
+/* utility */
+function hexToRgba(hex: string, alpha = 1) {
+  const clean = hex.replace('#', '');
+  const bigint = parseInt(clean.length === 3 ? clean.replace(/(.)/g, '$1$1') : clean, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
